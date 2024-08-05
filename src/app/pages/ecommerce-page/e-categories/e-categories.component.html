@@ -1,0 +1,1260 @@
+<nav class="top-nav">
+    <div class="nav-title">
+        <img src="../download.svg" />
+        GROUPON Merchant
+    </div>
+    <div class="nav-buttons">
+        <button class="nav-button" (click)="onHelpClick()">
+            <i class="fa fa-question-circle"></i> Help
+        </button>
+        <button class="nav-button" (click)="onPreviewClick()">
+            <i class="fa fa-eye"></i> Preview
+        </button>
+        <button class="nav-button" (click)="onSaveExitClick()">
+            <i class="fa fa-save"></i> Save & Exit
+        </button>
+    </div>
+</nav>
+<div class="container">
+    <nav class="side-nav">
+        <ul>
+            <li (click)="selectSection(1)">Options</li>
+            <li (click)="selectSection(2)">Photos</li>
+            <li (click)="selectSection(3)">Highlights</li>
+            <li (click)="selectSection(4)">Description</li>
+            <li (click)="selectSection(5)">Fine Print</li>
+            <li (click)="selectSection(6)">Voucher instructions</li>
+            <li (click)="toggleBusinessInfo(); selectSection(7)">
+                <span> Business Info</span>
+                <i
+                    class="fa fa-chevron-down"
+                    [class.collapsed]="!businessInfoOpen"
+                ></i>
+            </li>
+            <ul *ngIf="businessInfoOpen">
+                <li (click)="selectBusinessInfo(1)" class="businessinfo">
+                    Business Description
+                </li>
+                <li (click)="selectBusinessInfo(2)" class="businessinfo">
+                    Business Website
+                </li>
+                <li (click)="selectBusinessInfo(3)" class="businessinfo">
+                    Business Type
+                </li>
+                <li (click)="selectBusinessInfo(4)" class="businessinfo">
+                    Payment Info
+                </li>
+                <li (click)="selectBusinessInfo(5)" class="businessinfo">
+                    Tax Info
+                </li>
+            </ul>
+            <li (click)="selectSection(8)">Review</li>
+            <li (click)="selectSection(9)">Submit</li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <ng-container *ngIf="selectedSection === 1">
+            <h2>Customize your options</h2>
+            <p>
+                Review the options that customers will be able to buy from your
+                campaign page. We recommend offering multiple options to broaden
+                your reach.
+            </p>
+            <div>
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    "
+                >
+                    <h4>Your options</h4>
+                    <a
+                        href="#"
+                        (click)="openModal('type1', 0); $event.preventDefault()"
+                        >+ Add a new option</a
+                    >
+                </div>
+                <hr />
+                <div
+                    *ngFor="
+                        let form_option of selectedFormOption;
+                        let i = index
+                    "
+                >
+                    <div
+                        style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        "
+                    >
+                        <h4>Option {{ i + 1 }}</h4>
+                        <div>
+                            <a
+                                style="padding-right: 5px"
+                                (click)="
+                                    openModal('type2', i);
+                                    $event.preventDefault()
+                                "
+                                >Remove</a
+                            ><span>|</span>
+                            <a style="padding-left: 5px">Edit</a>
+                        </div>
+                    </div>
+                    <h5>
+                        {{ form_option.option_name }}
+                    </h5>
+                    <ul style="list-style-type: none">
+                        <li>Regular price: {{ form_option.regular_price }}</li>
+                        <li>Groupon price: {{ form_option.discount_price }}</li>
+                        <li>Monthly voucher cap: 50</li>
+                    </ul>
+                </div>
+                <a (click)="openModal('type1', 0); $event.preventDefault()"
+                    >+ Add a new option</a
+                >
+            </div>
+            <footer class="fixed-footer">
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+        <ng-container *ngIf="selectedSection === 2">
+            <h2>Which photos would you like to use?</h2>
+            <label>
+                <input
+                    type="radio"
+                    name="values"
+                    value="Use my own photo(s)"
+                    (change)="onPhotoSelect('option 1')"
+                />Use my own photo(s)
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    name="values"
+                    value="Choose a stock photo"
+                    (change)="onPhotoSelect('option 2')"
+                />Choose a stock photo
+            </label>
+            <p
+                style="
+                    background-color: rgb(243, 240, 240);
+                    padding: 10px;
+                    border-radius: 10px;
+                "
+            >
+                <b>Recommendation:</b>Using your own photos helps customers
+                imagine their experience and gives you a chance to show off your
+                business.
+            </p>
+            <hr />
+
+            <!--Option1 own photo-->
+            <div *ngIf="selectedPhotoOption === 'option 1'">
+                <h4>Upload Photos</h4>
+                <div
+                    class="upload-container"
+                    (drop)="onDrop($event)"
+                    (dragover)="onDragOver($event)"
+                >
+                    <input
+                        type="file"
+                        id="file"
+                        (change)="onFileSelected($event)"
+                        accept="image/*"
+                        hidden
+                    />
+                    <label for="file" class="upload-label">
+                        <div class="upload-placeholder">
+                            <img
+                                src="assets/upload-icon.png"
+                                alt="Upload Icon"
+                            />
+                            <p>
+                                Drag and Drop<br />or
+                                <span class="browse-files">browse files</span>
+                            </p>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="uploaded-photos" *ngIf="uploadedPhotos.length > 0">
+                    <h3>Successful uploads ({{ uploadedPhotos.length }})</h3>
+                    <p>
+                        Select which photo should appear first on your campaign
+                        page.
+                    </p>
+                    <div
+                        class="photo-item"
+                        *ngFor="let photo of uploadedPhotos; let i = index"
+                    >
+                        <img
+                            [src]="photo.src"
+                            alt="Uploaded Photo"
+                            class="uploaded-image"
+                        />
+                        <div class="photo-actions">
+                            <button
+                                (click)="setAsMainPhoto(i)"
+                                class="btn-main-photo"
+                                *ngIf="photo.main"
+                            >
+                                Main Photo
+                            </button>
+                            <button
+                                (click)="setAsMainPhoto(i)"
+                                class="btn-set-main"
+                                *ngIf="!photo.main"
+                            >
+                                Set as Main
+                            </button>
+                            <button
+                                (click)="deletePhoto(i)"
+                                class="btn-delete-photo"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="terms">
+                        <input type="checkbox" id="terms" name="terms" />
+                        <label for="terms"
+                            >By uploading images, I represent and warrant that I
+                            have full ownership and/or licensing rights to the
+                            images and authorize the use subject to the Terms
+                            and Conditions.</label
+                        >
+                    </div>
+                    x
+                </div>
+
+                <ul style="list-style-type: square">
+                    <li>Maximum 20 photos</li>
+                    <li>
+                        All photos must be in landscape (horizontal)
+                        orientation.
+                    </li>
+                    <li>Accepted file types: jpg or png</li>
+                    <li>Maximum file size: 5 MB</li>
+                    <li>Minimum resolution: 700 x 420 px</li>
+                    <li>
+                        Only upload photos you own (no photos from Yelp or
+                        Google).
+                    </li>
+                </ul>
+                <br />
+                <p>
+                    Photos that don’t meet Groupon's requirements may be
+                    replaced with a photo from our stock library.
+                </p>
+            </div>
+
+            <!--Option2 Stock-->
+            <div *ngIf="selectedPhotoOption === 'option 2'">
+                <h4>Choose from our stock photo library</h4>
+
+                <p
+                    style="
+                        background-color: rgb(240, 214, 176);
+                        padding: 10px;
+                        border-radius: 10px;
+                    "
+                >
+                    No images to display
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 10px">
+                <a href="">Get more help</a>
+                <span>|</span>
+                <a href="">Preview this section</a>
+            </div>
+            <footer class="fixed-footer">
+                <button class="prev" (click)="onPrevClick()">Previous</button>
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+        <ng-container *ngIf="selectedSection === 3">
+            <h2>What makes your campaign stand out?</h2>
+            <p>
+                Briefly describe the highlights of your business and campaign in
+                1–2 sentences.
+            </p>
+            <div>
+                <p>Highlights</p>
+                <textarea
+                    placeholder="Skilled tailors craft a bespoke Italian cotton shirt in the locally owned, longstanding shop "
+                    style="
+                        border: 1px solid rgb(226, 222, 222);
+                        width: 300px;
+                        height: 100px;
+                    "
+                    #highlights
+                    (input)="storeInput('highlights', highlights.value)"
+                >
+                </textarea>
+                <div class="highlight">
+                    <span style="font-weight: bold">Example:</span>
+                    <p>
+                        Skilled tailors craft a bespoke Italian cotton shirt in
+                        the locally owned, longstanding shop
+                    </p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px">
+                <a href="">Get more help</a>
+                <span>|</span>
+                <a href="">Preview this section</a>
+            </div>
+            <footer class="fixed-footer">
+                <button class="prev" (click)="onPrevClick()">Previous</button>
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+        <ng-container *ngIf="selectedSection === 4">
+            <h2>What's included in each option?</h2>
+            <p>
+                List out what's included in each of this campaign's options to
+                give customers a better understanding of what to expect.
+            </p>
+            <h5>Options</h5>
+            <ul
+                style="list-style-type: square"
+                *ngFor="let form_option of selectedFormOption"
+            >
+                <li>
+                    {{ form_option.option_name }}
+                </li>
+            </ul>
+            <p>Description</p>
+            <textarea
+                placeholder="Example:"
+                #description
+                (input)="storeInput('description', description.value)"
+            ></textarea>
+            <div class="highlight">
+                <span style="font-weight: bold">Example</span>
+                <ul style="list-style-type: square">
+                    <li>
+                        What's included: a bespoke button-down shirt in choice
+                        of 30 colors and styles of Italian cotton
+                    </li>
+                    <li>Two 30-minute fitting appointments required.</li>
+                </ul>
+            </div>
+            <div style="display: flex; gap: 10px">
+                <a href="">Get more help</a>
+                <span>|</span>
+                <a href="">Preview this section</a>
+            </div>
+            <footer class="fixed-footer">
+                <button class="prev" (click)="onPrevClick()">Previous</button>
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+        <ng-container *ngIf="selectedSection === 5">
+            <h2>Customize the fine print for this campaign.</h2>
+            <div>
+                <h4>Required fine print</h4>
+                <p>Review and update the following terms and limits.</p>
+            </div>
+            <div>
+                <h5>How many vouchers can each customer purchase?</h5>
+                <div>
+                    <button class="count" (click)="decrement()">-</button>
+                    <span style="font-weight: 500">{{ count }}</span>
+                    <button class="count" (click)="increment()">+</button>
+                </div>
+                <div class="highlight">
+                    <span style="font-weight: bold">Note:</span>
+                    <p>
+                        Groupon merchants are encouraged to let customers buy
+                        multiple vouchers for themselves and others. When
+                        customers buy multiple quantities, it improves the
+                        likelihood that they'll become repeat customers.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <h5>In how many days can customers repurchase vouchers?</h5>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                    <label>
+                        <input
+                            type="radio"
+                            name="values"
+                            (change)="storeInput('repurchase', 'Every 30 days')"
+                        />Every 30 days
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="values"
+                            (change)="storeInput('repurchase', 'Every 60 days')"
+                        />Every 60 days
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="values"
+                            (change)="storeInput('repurchase', 'Every 90 days')"
+                        />Every 90 days
+                    </label>
+                </div>
+                <div class="highlight">
+                    <span style="font-weight: bold">Note:</span>
+                    <p>
+                        At the end of this time frame, customers can buy
+                        additional vouchers.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <h5>
+                    Within how many months do customers have to use their
+                    vouchers for the promotional value?
+                </h5>
+                <div>
+                    <button class="count" (click)="decrementvoucher()">
+                        -
+                    </button>
+                    <span style="font-weight: 500">{{ vouchercount }}</span>
+                    <button class="count" (click)="incrementvoucher()">
+                        +
+                    </button>
+                </div>
+                <div class="highlight">
+                    <span style="font-weight: bold">Note:</span>
+                    <p>
+                        When a voucher expires, customers can still use the
+                        amount paid towards your full-priced services.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h5>Amount paid never expires</h5>
+                <div class="highlight">
+                    <span style="font-weight: bold">Note:</span>
+                    <p>
+                        After a customer's Groupon expires, the amount the
+                        customer originally paid is still valid.
+                    </p>
+                </div>
+            </div>
+            <a href="">Preview this section</a>
+            <div>
+                <h4>Optional fine print</h4>
+                <p>
+                    Add optional terms and limits to your campaign, but keep in
+                    mind that doing so can prevent customers from buying
+                    vouchers and may have a negative impact on you campaign’s
+                    performance.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                (change)="
+                                    toggleCheckbox('Limit Per Booking');
+                                    toggleOptions(0)
+                                "
+                            />Limit Per Booking, table or household
+                        </label>
+                        <br />
+                        <div
+                            *ngIf="showOptions[0]"
+                            style="display: flex; flex-direction: column"
+                        >
+                            <div>
+                                <button
+                                    class="count"
+                                    (click)="decrementBookingOption()"
+                                >
+                                    -
+                                </button>
+                                <span style="font-weight: 500">{{
+                                    bookingcount
+                                }}</span>
+                                <button
+                                    class="count"
+                                    (click)="incrementBookingOption()"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <br />
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="option"
+                                    (click)="onOptionClick('Option 1')"
+                                />
+                                table</label
+                            >
+
+                            <label
+                                ><input
+                                    type="radio"
+                                    name="option"
+                                    (click)="onOptionClick('Option 2')"
+                                />
+                                household</label
+                            >
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="option"
+                                    (click)="onOptionClick('Option 3')"
+                                />
+                                booking
+                            </label>
+                            <br />
+                            <p
+                                style="
+                                    background-color: rgb(243, 240, 240);
+                                    padding: 10px;
+                                    border-radius: 10px;
+                                "
+                            >
+                                <b>Note:</b> This tells customers how many
+                                vouchers they can use during their booking or by
+                                their table or household.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                (change)="
+                                    toggleCheckbox('Limit Per Visit.');
+                                    toggleOptions(1)
+                                "
+                            />Limit Per Visit.
+                        </label>
+                        <br />
+                        <div *ngIf="showOptions[1]">
+                            <button class="count" (click)="decrementLimit()">
+                                -
+                            </button>
+                            <span style="font-weight: 500">{{
+                                limitcount
+                            }}</span>
+                            <button class="count" (click)="incrementLimit()">
+                                +
+                            </button>
+                            <br />
+                            <p
+                                style="
+                                    background-color: rgb(243, 240, 240);
+                                    padding: 10px;
+                                    border-radius: 10px;
+                                "
+                            >
+                                <b>Note:</b> Limits customers to 1 Groupon deal
+                                per visit.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                (change)="
+                                    toggleCheckbox('Subject to weather.');
+                                    toggleOptions(2)
+                                "
+                            />Subject to weather.
+                        </label>
+                        <div *ngIf="showOptions[2]">
+                            <p
+                                style="
+                                    background-color: rgb(243, 240, 240);
+                                    padding: 10px;
+                                    border-radius: 10px;
+                                "
+                            >
+                                <b>Note:</b> Services may not be available to
+                                customers during certain weather conditions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                (change)="
+                                    toggleCheckbox('Not valid with offer.');
+                                    toggleOptions(3)
+                                "
+                            />Not valid with offer.
+                        </label>
+                        <div *ngIf="showOptions[3]">
+                            <p
+                                style="
+                                    background-color: rgb(243, 240, 240);
+                                    padding: 10px;
+                                    border-radius: 10px;
+                                "
+                            >
+                                <b>Note:</b> Groupon cannot be combined with
+                                other promotions.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                (change)="
+                                    toggleCheckbox('Not valid towards');
+                                    toggleOptions(4)
+                                "
+                            />Not valid towards
+                        </label>
+                        <br />
+                        <div
+                            *ngIf="showOptions[4]"
+                            style="display: flex; flex-direction: column"
+                        >
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="validoption"
+                                    (click)="onValidOptionClick('Option 1')"
+                                />
+
+                                taxes
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="validoption"
+                                    (click)="onValidOptionClick('Option 2')"
+                                />
+                                gratuity
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="validoption"
+                                    (click)="onValidOptionClick('Option 3')"
+                                />
+                                taxes or gratuity
+                            </label>
+                            <br />
+                            <p
+                                style="
+                                    background-color: rgb(243, 240, 240);
+                                    padding: 10px;
+                                    border-radius: 10px;
+                                "
+                            >
+                                <b>Note:</b> States that the voucher price does
+                                not include taxes, tip or both.
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                (change)="
+                                    toggleCheckbox('Excludes delivery.');
+                                    toggleOptions(5)
+                                "
+                            />Excludes delivery.
+                        </label>
+                        <div *ngIf="showOptions[5]">
+                            <p
+                                style="
+                                    background-color: rgb(243, 240, 240);
+                                    padding: 10px;
+                                    border-radius: 10px;
+                                "
+                            >
+                                <b>Note:</b> Excludes delivery.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="fixed-footer">
+                <button class="prev" (click)="onPrevClick()">Previous</button>
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+        <ng-container *ngIf="selectedSection === 6">
+            <h2>Let customers know how to redeem their vouchers.</h2>
+            <p>
+                Select one method of redemption and let customers know if they
+                need to make an appointment in advance. This information will be
+                added to your campaign.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+                <label>
+                    <input
+                        type="radio"
+                        name="values"
+                        value="option1"
+                        (change)="
+                            onVoucherOptionSelect('option1');
+                            storeInput(
+                                'voucher',
+                                'Customers will visit a physical location.'
+                            )
+                        "
+                    />Customers will visit a physical location.
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="values"
+                        value="option2"
+                        (change)="
+                            onVoucherOptionSelect('option2');
+                            storeInput(
+                                'voucher',
+                                'I  will travel to my customers.'
+                            )
+                        "
+                    />I will travel to my customers.
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="values"
+                        value="option3"
+                        (change)="
+                            onVoucherOptionSelect('option3');
+                            storeInput(
+                                'voucher',
+                                'Customers will use their voucher online.'
+                            )
+                        "
+                    />Customers will use their voucher online.
+                </label>
+            </div>
+            <hr />
+
+            <!--Voucher Instructions-->
+
+            <div *ngIf="selectedVoucherOption === 'option1'">
+                <div>
+                    <h3>Customers will visit a physical location</h3>
+                    <p>
+                        Customers will visit your business location(s) to
+                        receive the service or product they purchased. (Example:
+                        salon, retail shop, restaurant, etc.)
+                    </p>
+                </div>
+                <div>
+                    <h3>Do customers need to make an appointment?</h3>
+                    <label>
+                        <input type="radio" name="values" value="option1" />No
+                        appointment needed
+                    </label>
+                    <label>
+                        <input type="radio" name="values" value="option1" />Yes
+                        appointment required
+                    </label>
+                </div>
+                <form>
+                    <div>
+                        <label> Contact Method </label>
+                        <input
+                            class="bank-input"
+                            style="color: rgb(218, 216, 216)"
+                        />
+                    </div>
+                    <div>
+                        <label> Phone Number </label>
+                        <input
+                            class="bank-input"
+                            style="color: rgb(218, 216, 216)"
+                        />
+                    </div>
+                </form>
+            </div>
+
+            <!--Option2-->
+
+            <div *ngIf="selectedVoucherOption === 'option2'">
+                <div>
+                    <h3>I will travel to my customers</h3>
+                    <p>
+                        You will go to the customer’s location to provide
+                        service. (Example: window cleaning, home repair, car
+                        service, etc.)
+                    </p>
+                    <p>
+                        Let customers know your service area by listing the
+                        primary area where you provide service and/or the
+                        distance you will travel.
+                    </p>
+                </div>
+                <p>Service Area</p>
+                <textarea
+                    placeholder="Ex:Valid only within 10 miles of downtown Chicago (zipcode 60611) "
+                    style="
+                        border: 1px solid rgb(226, 222, 222);
+                        width: 300px;
+                        height: 100px;
+                    "
+                ></textarea>
+                <form>
+                    <div>
+                        <label> Contact Method </label>
+                        <input
+                            class="bank-input"
+                            style="color: rgb(218, 216, 216)"
+                        />
+                    </div>
+                    <div>
+                        <label> Phone Number </label>
+                        <input
+                            class="bank-input"
+                            style="color: rgb(218, 216, 216)"
+                        />
+                    </div>
+                </form>
+            </div>
+
+            <!--Option3-->
+
+            <div *ngIf="selectedVoucherOption === 'option3'">
+                <div>
+                    <h3>Customers will use their voucher online</h3>
+                    <p>
+                        Customers will go to your business website to use or
+                        access the service they purchased. (Example: eLearning
+                        course, online consulting, meal prep delivery, etc.)
+                    </p>
+                </div>
+
+                <form>
+                    <div>
+                        <label> Contact Method </label>
+                        <input
+                            class="bank-input"
+                            style="color: rgb(218, 216, 216)"
+                        />
+                    </div>
+                    <div>
+                        <label> Phone Number </label>
+                        <input
+                            class="bank-input"
+                            style="color: rgb(218, 216, 216)"
+                        />
+                    </div>
+                </form>
+            </div>
+            <footer class="fixed-footer">
+                <button class="prev" (click)="onPrevClick()">Previous</button>
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+
+        <ng-container *ngIf="selectedSection === 7 && businessInfoSection">
+            <ng-container *ngIf="businessInfoSection === 1">
+                <h2>Describe your business</h2>
+                <p>Introduce customers to your business and tell your story.</p>
+                <div>
+                    <p>Business description</p>
+                    <textarea
+                        placeholder="Skilled tailors craft a bespoke Italian cotton shirt in the locally owned, longstanding shop "
+                        style="
+                            border: 1px solid rgb(226, 222, 222);
+                            width: 300px;
+                            height: 100px;
+                        "
+                        #businessdesc
+                        (input)="storeInput('businessdesc', businessdesc.value)"
+                    >
+                    </textarea>
+                </div>
+                <div class="highlight">
+                    <span style="font-weight: bold">Example:</span>
+                    <p>
+                        With a menu of medical-grade aesthetic treatments,
+                        Advance Wellness MedSpa aims to give clients noticeable
+                        results. Just as importantly, though, it staffs skilled,
+                        dedicated professionals, including medical director
+                        Rachel George, a board-certified physician with more
+                        than 20 years of experience.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 10px">
+                    <a href="">Get more help</a>
+                    <span>|</span>
+                    <a href="">Preview this section</a>
+                </div>
+                <footer class="fixed-footer">
+                    <button class="prev" (click)="onPrevInfoClick()">
+                        Previous
+                    </button>
+                    <button class="next" (click)="onNextInfoClick()">
+                        Next
+                    </button>
+                </footer>
+            </ng-container>
+            <ng-container *ngIf="businessInfoSection === 2">
+                <h2>What’s your business website?</h2>
+                <div class="highlight">
+                    <span style="font-weight: bold">Required:</span>
+                    <p>
+                        Provide a valid website or social media page. Groupon
+                        requires an up-to-date, public website or social media
+                        page to verify business information and pricing. Your
+                        campaign cannot be approved until a valid website is
+                        provided.
+                    </p>
+                </div>
+                <div>
+                    <p>Business website</p>
+                    <input
+                        placeholder=" https://www.abc.com/locations
+               "
+                        style="border: 1px solid rgb(192, 189, 189)"
+                        #website
+                        (input)="storeInput('website', website.value)"
+                    />
+                </div>
+                <div>
+                    <b>Website requirements</b>
+                    <ul style="list-style-type: square">
+                        <li>
+                            Spelling of the business name on your website must
+                            match your business name.
+                        </li>
+                        <li>
+                            Your business name must be listed on the first page.
+                        </li>
+                        <li>
+                            Links to social media pages must be your business
+                            pages.
+                        </li>
+                    </ul>
+                </div>
+                <footer class="fixed-footer">
+                    <button class="prev" (click)="onPrevInfoClick()">
+                        Previous
+                    </button>
+                    <button class="next" (click)="onNextInfoClick()">
+                        Next
+                    </button>
+                </footer>
+            </ng-container>
+            <ng-container *ngIf="businessInfoSection === 3">
+                <h2>What type of business are you?</h2>
+
+                <p>Choose the description that best matches your business.</p>
+                <div>
+                    <div>
+                        <label>
+                            <input type="radio" name="values" value="option1" />
+
+                            I’m an independent contractor, contracting to
+                            perform services for another company.
+                        </label>
+                        <p style="color: rgb(190, 187, 187)">
+                            Example: I am renting a space (i.e. chair, room,
+                            etc.) and using the facilities of a company that
+                            also provides the service(s).
+                        </p>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                name="values"
+                                value="option2"
+                            />I’m a company with 2+ employees performing
+                            services.
+                        </label>
+                        <p style="color: rgb(190, 187, 187)">
+                            Example: I am the owner of the contracting entity
+                            with more than one employee performing the
+                            service(s).
+                        </p>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                name="values"
+                                value="option3"
+                            />I’m a company />I’m a third party representative
+                            involved in the sale of the goods or services being
+                            sold.
+                        </label>
+                        <p style="color: rgb(190, 187, 187)">
+                            Example: I represent a marketing company and am
+                            setting up a campaign for a business providing the
+                            services.
+                        </p>
+                    </div>
+                </div>
+                <footer class="fixed-footer">
+                    <button class="prev" (click)="onPrevInfoClick()">
+                        Previous
+                    </button>
+                    <button class="next" (click)="onNextInfoClick()">
+                        Next
+                    </button>
+                </footer>
+            </ng-container>
+            <ng-container *ngIf="businessInfoSection === 4">
+                <h2>Add your payment information.</h2>
+                <p>
+                    Provide information for the account where you want to
+                    receive payments owed to you per your merchant agreement.
+                </p>
+                <div>
+                    <form>
+                        <div>
+                            <label> Bank Name </label>
+                            <input
+                                class="bank-input"
+                                placeholder="Example: Bank of Groupon"
+                                style="color: rgb(218, 216, 216)"
+                            />
+                        </div>
+                        <div>
+                            <label> Routing Number </label>
+                            <input
+                                class="bank-input"
+                                placeholder="Example: 123456789"
+                                style="color: rgb(218, 216, 216)"
+                            />
+                        </div>
+                        <div>
+                            <label> Bank Account Number </label>
+                            <input
+                                class="bank-input"
+                                placeholder="Example: 123456789"
+                                style="color: rgb(218, 216, 216)"
+                            />
+                        </div>
+                    </form>
+                </div>
+                <div style="padding: 20px">
+                    <b>Where can I find this information?</b>
+                    <ul style="list-style-type: square">
+                        <li>On a paper check</li>
+                        <li>Bank statement</li>
+                        <li>Bank website or mobile app</li>
+                    </ul>
+                </div>
+                <footer class="fixed-footer">
+                    <button class="prev" (click)="onPrevInfoClick()">
+                        Previous
+                    </button>
+                    <button class="next" (click)="onNextInfoClick()">
+                        Next
+                    </button>
+                </footer>
+            </ng-container>
+            <ng-container *ngIf="businessInfoSection === 5">
+                <h2>Add your tax information.</h2>
+                <p>
+                    Select a method to verify your tax information. We use this
+                    information to confirm payments to your business.
+                </p>
+                <div
+                    style="
+                        display: flex;
+                        flex-direction: column;
+                        padding-bottom: 10px;
+                    "
+                >
+                    <label>
+                        <input
+                            type="radio"
+                            name="values"
+                            value="option1"
+                        />Social Security Number
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="values"
+                            value="option1"
+                        />Employer Identification Number (EIN)
+                    </label>
+                </div>
+                <div>
+                    <form>
+                        <div>
+                            <label> Business Name on Record</label>
+                            <input
+                                class="bank-input"
+                                placeholder="Example: James Smith"
+                                style="color: rgb(218, 216, 216)"
+                            />
+                        </div>
+                        <div>
+                            <label> Employer Identification Number </label>
+                            <input
+                                class="bank-input"
+                                placeholder="Example: 123456789"
+                                style="color: rgb(218, 216, 216)"
+                            />
+                        </div>
+                    </form>
+                </div>
+                <div style="padding: 20px">
+                    <b>Where can I find this information?</b>
+                    <ul style="list-style-type: square">
+                        <li>Social Security Card</li>
+                        <li>Tax returns</li>
+                        <li>Latest W-2 form</li>
+                        <li>Bank statements</li>
+                    </ul>
+                </div>
+                <footer class="fixed-footer">
+                    <button class="prev" (click)="onPrevInfoClick()">
+                        Previous
+                    </button>
+                    <button class="next" (click)="onNextInfoClick()">
+                        Next
+                    </button>
+                </footer>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="selectedSection === 8">
+            <h2>Review your campaign.</h2>
+            <p>
+                Here’s how your campaign will look with the content you’ve added
+                so far. Take a last look before you submit your campaign for
+                review.
+            </p>
+            <br />
+            <div>
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    "
+                >
+                    <h4>Start date</h4>
+                    <a>Edit</a>
+                </div>
+                <p>
+                    Your campaign will launch within 1-2 business days of
+                    submission, pending approval. Prefer a later date? Select
+                </p>
+                <p>Launch date: {{ futureDate }}</p>
+            </div>
+            <hr style="color: rgb(191, 187, 187)" />
+
+            <h5>Options</h5>
+            <div *ngFor="let option of selectedFormOption; let i = index">
+                <h5>Option{{ i + 1 }}</h5>
+                <p>{{ option.option_name }}</p>
+            </div>
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>Photos</h5>
+            <div
+                class="uploaded-photos"
+                *ngFor="let photo of storedInputs['photos']"
+            >
+                <img
+                    [src]="photo.src"
+                    alt="Uploaded Photo"
+                    class="uploaded-image"
+                />
+            </div>
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>Highlights</h5>
+            <p>{{ storedInputs["highlights"] }}</p>
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>About this Deal</h5>
+            <p>{{ storedInputs["description"] }}</p>
+
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>Fine Print</h5>
+            <ul>
+                <li *ngFor="let checkbox of storedInputs['selectedCheckboxes']">
+                    {{ checkbox }}
+                </li>
+            </ul>
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>Voucher Instructions</h5>
+            <p>{{ storedInputs["voucher"] }}</p>
+
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>About</h5>
+            <p>{{ storedInputs["businessdesc"] }}</p>
+
+            <hr style="color: rgb(191, 187, 187)" />
+            <h5>Business Website</h5>
+            <p>{{ storedInputs["website"] }}</p>
+
+            <hr style="color: rgb(191, 187, 187)" />
+            <footer class="fixed-footer">
+                <button class="prev" (click)="onPrevClick()">Previous</button>
+                <button class="next" (click)="onNextClick()">Next</button>
+            </footer>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Modal structure -->
+<div class="modal" [ngClass]="{ show: isModalOpen }">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <ng-container [ngSwitch]="modalContentType">
+            <div *ngSwitchCase="'type1'">
+                <h2>Name this option.</h2>
+                <div>
+                    <p>
+                        Give this option a name that matches an existing service
+                        or good on your website or menu.
+                    </p>
+                    <div>
+                        <label class="modal-label"> Option name </label>
+
+                        <input placeholder="Example:" />
+                        <p
+                            style="
+                                background-color: rgb(240, 214, 176);
+                                padding: 10px;
+                                border-radius: 10px;
+                            "
+                        >
+                            <b>Example:</b> Women’s Lower Legs Wax (Both Legs)
+                        </p>
+                    </div>
+                </div>
+                <button class="modal-button" (click)="closeModal()">
+                    Cancel
+                </button>
+                <button class="modal-button" (click)="closeModal()">
+                    Done
+                </button>
+            </div>
+
+            <div *ngSwitchCase="'type2'">
+                <h2>Remove Option ?</h2>
+                <p>
+                    If you remove this option, your work will be permanently
+                    deleted.
+                </p>
+                <button class="modal-button" (click)="removeModal()">
+                    Yes, remove
+                </button>
+                <button class="modal-button" (click)="closeModal()">
+                    Cancel
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>

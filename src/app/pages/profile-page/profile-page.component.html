@@ -1,0 +1,35 @@
+<!-- Profile -->
+<mat-card
+    class="daxa-card profile-card mb-25 p-0 border-radius bg-white border-none d-block"
+    [class.component-dark-theme]="themeService.isDark()"
+    [class.rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-content>
+        <div class="profile-content">
+            <ul class="nav-links text-center pl-0 mb-0 list-unstyled">
+                <li class="d-inline-block">
+                    <a
+                        routerLink="/profile"
+                        class="d-block position-relative"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        Sales
+                    </a>
+                </li>
+                <li class="d-inline-block">
+                    <a
+                        routerLink="/profile/teams"
+                        class="d-block position-relative"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        Redemption
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<router-outlet></router-outlet>

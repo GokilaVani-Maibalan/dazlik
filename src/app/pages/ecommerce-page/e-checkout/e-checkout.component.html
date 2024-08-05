@@ -1,0 +1,136 @@
+<nav class="top-nav">
+    <div class="nav-title">
+        <img src="../download.svg" />
+        Dazlik
+    </div>
+    <div class="nav-buttons">
+        <button class="nav-button">Exit</button>
+    </div>
+</nav>
+<div class="campaign">
+    <div class="page1" *ngIf="currentPage === 0">
+        <h3>Let’s build a campaign! Which service would you like to offer?</h3>
+        <p>
+            Choose one. You can always create additional campaigns for other
+            services you offer.
+        </p>
+        <div
+            style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            "
+        >
+            <h3>Available services</h3>
+            <!-- <a href="javascript:void(0)"
+          >+ Add services</a
+        > -->
+        </div>
+
+        <div *ngFor="let option of selectedOptions">
+            <div
+                style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding-bottom: 10px;
+
+                    padding: 1.25rem 0;
+                    border-bottom: 1px solid #e6e7e8;
+                    border-top: 1px solid #e6e7e8;
+                "
+            >
+                <label>
+                    <input
+                        type="radio"
+                        [value]="option"
+                        [ngClass]="{ selected: templateOption === option }"
+                        (click)="onOptionClick(option.name)"
+                        name="availableService"
+                    />
+                    {{ option.name }}
+                </label>
+                <a>Remove </a>
+            </div>
+        </div>
+        <footer class="fixed-footer">
+            <button (click)="next()">Build Campaign</button>
+        </footer>
+    </div>
+    <div *ngIf="currentPage === 1">
+        <h3>Which template would you like to use?</h3>
+        <p>
+            Get your campaign up and running with a customizable template. Based
+            on the service you selected, we think the following templates would
+            perform well for your campaign.
+        </p>
+        <div
+            style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            "
+        >
+            <h3>Recommended Templates</h3>
+            <a href="javascript:void(0)" (click)="previous()">Change service</a>
+        </div>
+
+        <div
+            class="template_display"
+            *ngFor="let template_option of selectedTemplateOptions"
+        >
+            <div class="template_image">
+                <img src="{{ template_option.temp_image }}" />
+            </div>
+            <div class="badge">
+                <span
+                    >{{ template_option.temp_options.length }} customizable
+                    options</span
+                >
+            </div>
+
+            <ul
+                style="list-style-type: none"
+                *ngFor="let option_type of template_option.temp_options"
+            >
+                <li>
+                    <span>{{ option_type.option_number }} : </span
+                    >{{ option_type.option_name }}
+                </li>
+            </ul>
+            <hr />
+            <label class="temp_label">
+                <input
+                    type="radio"
+                    name="templateOptions"
+                    (change)="
+                        onFormOptionSelect(
+                            template_option.temp_options,
+                            template_option.options.name
+                        )
+                    "
+                />
+                Use this template
+            </label>
+        </div>
+        <footer class="fixed-footer">
+            <button class="prev" (click)="previous()">Previous</button>
+            <button class="next" (click)="next()">Next</button>
+        </footer>
+    </div>
+</div>
+
+<!-- Modal structure -->
+<div class="modal" *ngIf="modalOpen">
+    <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>Remove service?</h2>
+
+        <p>
+            If you remove this service, your work will be permanently deleted.
+        </p>
+
+        <button class="modal-button" (click)="closeModal()">Cancel</button>
+        <button class="modal-button" (click)="closeModal()">Yes, remove</button>
+    </div>
+</div>

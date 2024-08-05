@@ -1,0 +1,84 @@
+<!-- <mat-card
+    class="daxa-card profile-card mb-25 p-0 border-radius bg-white border-none d-block"
+    [class.component-dark-theme]="themeService.isDark()"
+    [class.rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-content>
+        <div class="profile-content"> -->
+<!-- <div class="d-md-flex align-items-end justify-content-between">
+                <div class="d-md-flex align-items-end"></div>
+            </div> -->
+<!-- <ul
+                class="nav-links text-center pl-0 mb-0 list-unstyled"
+                style="margin-top: 100px"
+            >
+                <li class="d-inline-block">
+                    <a
+                        routerLink="/"
+                        class="d-block position-relative"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        Sales
+                    </a>
+                </li>
+                <li class="d-inline-block">
+                    <a
+                        routerLink="/ecommerce-page/redeem"
+                        class="d-block position-relative"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        Redemption
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<router-outlet></router-outlet> -->
+
+<!-- Breadcrumb -->
+<div
+    class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between"
+></div>
+
+<!-- Profile -->
+<mat-card
+    class="daxa-card profile-card mb-25 p-0 border-radius bg-white border-none d-block"
+    [class.component-dark-theme]="themeService.isDark()"
+    [class.rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-content>
+        <div class="profile-content">
+            <div class="d-md-flex align-items-end justify-content-between">
+                <div class="d-md-flex align-items-end"></div>
+            </div>
+            <ul class="nav-links text-center pl-0 mb-0 list-unstyled">
+                <li class="d-inline-block">
+                    <a
+                        routerLink="/profile"
+                        class="d-block position-relative"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        Profile
+                    </a>
+                </li>
+                <li class="d-inline-block">
+                    <a
+                        routerLink="/profile/teams"
+                        class="d-block position-relative"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        Redemption
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<router-outlet></router-outlet>

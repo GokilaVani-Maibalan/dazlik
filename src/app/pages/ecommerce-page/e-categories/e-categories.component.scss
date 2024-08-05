@@ -1,0 +1,348 @@
+.container {
+    display: flex;
+    height: 100vh; /* Ensuring the container takes up the full height */
+    font-weight: 300;
+  }
+  
+  .side-nav {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+    height: 100%; 
+    box-sizing: border-box; 
+    overflow-y: auto;
+  }
+  
+  .side-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .side-nav ul li {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .side-nav ul li:hover {
+    background-color: #ddd;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    max-width: 583px;
+    margin: 0 auto;
+    padding: 1rem;
+    overflow-y: auto; /* Adding scroll if content exceeds the container's height */
+    padding-bottom: 100px; 
+    box-sizing: border-box;
+  }
+  
+  h2 {
+    margin-top: 0;
+  }
+  
+  .highlight{
+    padding: 1rem;
+    background-color: #f6f7f8;
+    border-radius: .5rem;
+    font-size: 14px;
+    margin: 1rem 0
+  }
+  
+  .count {
+    font-size: 1.5rem;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50%;
+    border:none;
+    cursor: pointer;
+  }
+  
+  .spacer {
+  flex: 1 1 auto;
+  }
+  
+  
+  
+  .menu-label {
+  margin-left: 8px;
+  }
+  
+  .top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #46da46;
+  border-bottom: 2px solid rgb(211, 208, 208);
+  color: rgb(254, 252, 252);
+  padding: 1.3125rem 1.5rem;
+  font-size: 1.2rem;
+  }
+  
+  .nav-title {
+  font-weight: bold;
+  }
+  
+  .nav-buttons {
+  display: flex;
+  gap: 10px;
+  }
+  
+  .nav-button {
+  background: none;
+  border: none;
+  color: rgb(253, 252, 252);
+  
+  cursor: pointer;
+  font-size: small;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  }
+  
+  .nav-button i {
+  font-size: 1.2rem;
+  }
+  
+  .nav-button:hover {
+  text-decoration: underline;
+  }
+  
+  .prev, .next {
+  
+  width: 10%;
+  margin-left: 20px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgb(44, 157, 48);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  }
+  
+  .fixed-footer{
+  /* display: flex; */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  justify-content: space-around;
+  background-color: white;
+  border-top: 1px solid rgb(230, 230, 230);
+  align-items: center;
+  padding: 0 20px;
+  left: 25%;
+  /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); */
+  z-index: 1000; /* Ensure it stays above other content */
+  }
+  
+  .prev{
+  background-color:white;
+  border: 1px solid gray;
+  color: gray;
+  }
+  
+  .prev:hover{
+  border-color: green;
+  color: green;
+  }
+  
+  .next:hover{
+  background-color: rgb(15, 107, 15);
+  }
+  
+  .fixed-footer button:disabled {
+  background-color: #d0cccc;
+  cursor: not-allowed;
+  }
+  
+  a{
+  text-decoration: none;
+  color: #0076d6;
+  }
+  
+  /* The Modal (background) */
+  .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  transition: all 0.3s ease-in-out;
+  }
+  
+  /* Modal Content */
+  .modal-content {
+  background-color: #fefefe;
+  margin: 10% auto; /* 10% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%; /* Could be more or less, depending on screen size */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px; /* Optional: Add rounded corners */
+  transition: all 0.3s ease-in-out;
+  }
+  
+  /* The Close Button */
+  .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  }
+  
+  
+  /* Show the modal and overlay */
+  .show {
+  display: block;
+  }
+  
+  .modal-label{
+  padding-bottom: 15px;
+  display: block;
+  }
+  
+  .modal-button{
+  margin-left: 20px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: rgb(44, 157, 48);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  }
+  
+  .side-nav .fa-chevron-down.collapsed {
+  transform: rotate(-90deg);
+  }
+  
+  .side-nav ul ul li {
+  cursor: pointer;
+  padding: 8px 0;
+  }
+  
+  .businessinfo{
+  margin-left: 20px;
+  }
+  
+  .bank-input{
+  display: block;
+  border: 2px solid rgb(183, 180, 180);
+  width:80%;
+  height:50px;
+  margin: 5px;
+  }
+  
+  /* Photo uploader */
+  .upload-container {
+    border: 2px dashed #28a745;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+  }
+  
+  .upload-container:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+  }
+  
+  .upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .upload-placeholder img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .browse-files {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .uploaded-photos {
+    margin-top: 20px;
+  }
+  
+  .photo-item {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    border: 2px solid #28a745;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .uploaded-image {
+    max-width: 200px;
+    height: auto;
+    display: block;
+  }
+  
+  .photo-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .btn-main-photo, .btn-set-main, .btn-delete-photo {
+    background: white;
+    border: none;
+    margin: 5px 0;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    /* transition: background-color 0.3s; */
+  }
+  
+  .btn-main-photo {
+  font-weight: bold;
+  }
+  
+  .btn-set-main {
+    color: blue;
+  }
+  
+  .btn-delete-photo {
+    color: red;
+  }
+  
+  .btn-main-photo:hover, .btn-set-main:hover, .btn-delete-photo:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+  
+  .terms {
+    margin-top: 20px;
+  }
+  
