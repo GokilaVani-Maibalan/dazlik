@@ -19,6 +19,7 @@ import {
     NgApexchartsModule,
     ApexGrid,
 } from 'ng-apexcharts';
+import { HttpServicesService } from '../../../services/http-services.service';
 
 export type ChartOptions = {
     series: ApexAxisChartSeries;
@@ -52,12 +53,12 @@ export class ProjectsAnalysisComponent {
     @ViewChild('chart') chart: ChartComponent;
     public chartOptions: Partial<ChartOptions>;
 
-    constructor() {
+    constructor(private supabaseService: HttpServicesService) {
         this.chartOptions = {
             series: [
                 {
                     name: 'Age',
-                    data: [30, 50, 27, 16],
+                    data: [],
                 },
             ],
             chart: {
@@ -129,5 +130,36 @@ export class ProjectsAnalysisComponent {
                 },
             },
         };
+    }
+
+    ngOnInit() {
+        this.loadCustomerAgeData();
+    }
+
+    async loadCustomerAgeData() {
+        const data = await this.supabaseService.getCustomerAgeData();
+        if (data.length) {
+            this.updateChartOptions(data);
+        }
+        console.log(data);
+    }
+
+    updateChartOptions(data: any[]) {
+        const ageCategories = ['Under 25', '25-35', '35-50', '50+'];
+        const ageData = ageCategories.map((category) => {
+            const entry = data.find((d) => d.age_group === category);
+            return entry ? entry.count : 0;
+        });
+
+        this.chartOptions.series = [
+            {
+                name: 'Age',
+                data: ageData,
+            },
+        ];
+
+        if (this.chart) {
+            this.chart.updateOptions(this.chartOptions);
+        }
     }
 }

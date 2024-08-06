@@ -92,7 +92,7 @@
                                     top: 20px;
                                     right: 20px;
                                     position: absolute;
-        
+
                                     &::after {
                                         display: none;
                                     }
@@ -136,8 +136,7 @@
 }
 
 /* Max width 767px */
-@media only screen and (max-width : 767px) {
-
+@media only screen and (max-width: 767px) {
     .mat-mdc-card {
         &.daxa-card {
             &.seller-card {
@@ -205,15 +204,13 @@
             }
         }
     }
-
 }
 
 /* Min width 576px to Max width 767px */
-@media only screen and (min-width : 576px) and (max-width : 767px) {}
+@media only screen and (min-width: 576px) and (max-width: 767px) {}
 
 /* Min width 768px to Max width 991px */
-@media only screen and (min-width : 768px) and (max-width : 991px) {
-
+@media only screen and (min-width: 768px) and (max-width: 991px) {
     .mat-mdc-card {
         &.daxa-card {
             &.seller-card {
@@ -225,12 +222,10 @@
             }
         }
     }
-
 }
 
-
 /* Min width 992px to Max width 1199px */
-@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+@media only screen and (min-width: 992px) and (max-width: 1199px) {}
 
 /* Min width 1200px to Max width 1399px */
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {}
@@ -250,15 +245,12 @@
                     h5 {
                         margin-bottom: 10px;
                         margin-top: 10px;
-                        
                     }
                     .number {
                         font-size: 40px;
                         text-align: center;
                     }
                 }
-               
-
             }
             &.component-dark-theme {
                 background-color: #28333f;
@@ -266,26 +258,61 @@
         }
     }
 }
+
+/* Star Rating Styles */
 .star-rating {
     display: inline-block;
-  }
-  .star {
+}
+
+.star {
     font-size: 2rem;
     color: lightgray;
     cursor: pointer;
-  }
-  .star.filled {
+}
+
+.star.filled {
     color: gold;
-  }
+}
+
+.feedback-item {
+    margin-bottom: 20px;
+}
+
+.feedback-item form {
+    display: flex;
+    align-items: center;
+}
+
+.feedback-item input {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.feedback-item button {
+    padding: 8px 12px;
+    background-color: var(--daxaColor);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.feedback-item button:disabled {
+    background-color: gray;
+}
+
+.feedback-item p {
+    margin: 10px 0 0;
+    font-style: italic;
+}
 
 /* Max width 767px */
-@media only screen and (max-width : 767px) {
-
+@media only screen and (max-width: 767px) {
     .mat-mdc-card {
         &.daxa-card {
             &.total-orders-card {
                 margin-bottom: 15px;
-                
+
                 .mat-mdc-card-content {
                     .title {
                         .number {
@@ -293,22 +320,20 @@
                             text-align: center;
                         }
                     }
-                    
                 }
             }
         }
     }
-
 }
 
 /* Min width 576px to Max width 767px */
-@media only screen and (min-width : 576px) and (max-width : 767px) {}
+@media only screen and (min-width: 576px) and (max-width: 767px) {}
 
 /* Min width 768px to Max width 991px */
-@media only screen and (min-width : 768px) and (max-width : 991px) {}
+@media only screen and (min-width: 768px) and (max-width: 991px) {}
 
 /* Min width 992px to Max width 1199px */
-@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+@media only screen and (min-width: 992px) and (max-width: 1199px) {}
 
 /* Min width 1200px to Max width 1399px */
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {}

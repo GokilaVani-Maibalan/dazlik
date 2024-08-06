@@ -10,26 +10,44 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
+import { HttpServicesService } from '../../../services/http-services.service';
 
 @Component({
     selector: 'app-e-customers',
     standalone: true,
-    imports: [MatCardModule, MatMenuModule, MatButtonModule, RouterLink, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, MatTooltipModule],
+    imports: [
+        MatCardModule,
+        MatMenuModule,
+        MatButtonModule,
+        RouterLink,
+        MatTableModule,
+        MatPaginatorModule,
+        NgIf,
+        MatCheckboxModule,
+        MatTooltipModule,
+    ],
     templateUrl: './e-customers.component.html',
-    styleUrl: './e-customers.component.scss'
+    styleUrl: './e-customers.component.scss',
 })
 export class ECustomersComponent {
+    displayedColumns: string[] = [
+        'select',
+        'campaignID',
+        'name',
 
-    displayedColumns: string[] = ['select', 'orderId', 'customer', 'email', 'phone', 'lastLogin', 'totalSpend', 'totalOrders', 'status', 'action'];
+        'startDate',
+        'dueDate',
+        'sold',
+        'redeemed',
+        'action',
+    ];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
-
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
     }
-
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
         const numSelected = this.selection.selected.length;
@@ -51,7 +69,9 @@ export class ECustomersComponent {
         if (!row) {
             return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
         }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.customer + 1}`;
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+            row.id + 1
+        }`;
     }
 
     // Search Filter
@@ -60,454 +80,89 @@ export class ECustomersComponent {
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    // isToggled
-    isToggled = false;
+    // Popup Trigger
+    classApplied = false;
+    toggleClass() {
+        this.classApplied = !this.classApplied;
+    }
 
     constructor(
-        public themeService: CustomizerSettingsService
+        public themeService: CustomizerSettingsService,
+        private supabaseService: HttpServicesService
     ) {
-        this.themeService.isToggled$.subscribe(isToggled => {
+        this.themeService.isToggled$.subscribe((isToggled) => {
             this.isToggled = isToggled;
         });
     }
+
+    // isToggled
+    isToggled = false;
 
     // RTL Mode
     toggleRTLEnabledTheme() {
         this.themeService.toggleRTLEnabledTheme();
     }
 
-}
+    ngOnInit() {
+        this.fetchData();
+    }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-    {
-        orderId: '#ARP-1217',
-        customer: {
-            img: 'assets/images/users/user15.jpg',
-            name: 'Marcia Baker'
-        },
-        email: 'marcia@example.com',
-        phone: '+1 555-123-4567',
-        lastLogin: 'Nov 10, 2023',
-        totalSpend: '$6855.00',
-        totalOrders: 125,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-1364',
-        customer: {
-            img: 'assets/images/users/user7.jpg',
-            name: 'Carolyn Barnes'
-        },
-        email: 'barnes@example.com',
-        phone: '+1 555-987-6543',
-        lastLogin: 'Nov 11, 2023',
-        totalSpend: '$258.00',
-        totalOrders: 99,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-2951',
-        customer: {
-            img: 'assets/images/users/user12.jpg',
-            name: 'Donna Miller'
-        },
-        email: 'donna@example.com',
-        phone: '+1 555-456-7890',
-        lastLogin: 'Nov 12, 2023',
-        totalSpend: '$3,890.00',
-        totalOrders: 145,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7342',
-        customer: {
-            img: 'assets/images/users/user5.jpg',
-            name: 'Barbara Cross'
-        },
-        email: 'cross@example.com',
-        phone: '+1 555-369-7878',
-        lastLogin: 'Nov 13, 2023',
-        totalSpend: '$2,500.00',
-        totalOrders: 279,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-4619',
-        customer: {
-            img: 'assets/images/users/user16.jpg',
-            name: 'Rebecca Block'
-        },
-        email: 'block@example.com',
-        phone: '+1 555-658-4488',
-        lastLogin: 'Nov 14, 2023',
-        totalSpend: '$8,200.00',
-        totalOrders: 169,
-        status: {
-            // active: 'Active',
-            deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7346',
-        customer: {
-            img: 'assets/images/users/user9.jpg',
-            name: 'Ramiro McCarty'
-        },
-        email: 'ramiro@example.com',
-        phone: '+1 555-558-9966',
-        lastLogin: 'Nov 15, 2023',
-        totalSpend: '$640.00',
-        totalOrders: 46,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7612',
-        customer: {
-            img: 'assets/images/users/user1.jpg',
-            name: 'Robert Fairweather'
-        },
-        email: 'robert@example.com',
-        phone: '+1 555-357-5888',
-        lastLogin: 'Nov 16, 2023',
-        totalSpend: '$9,100.00',
-        totalOrders: 184,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7642',
-        customer: {
-            img: 'assets/images/users/user6.jpg',
-            name: 'Marcelino Haddock'
-        },
-        email: 'haddock@example.com',
-        phone: '+1 555-456-8877',
-        lastLogin: 'Nov 17, 2023',
-        totalSpend: '$7,300.00',
-        totalOrders: 166,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-4652',
-        customer: {
-            img: 'assets/images/users/user13.jpg',
-            name: 'Thomas Wilson'
-        },
-        email: 'wildon@example.com',
-        phone: '+1 555-622-4488',
-        lastLogin: 'Nov 18, 2023',
-        totalSpend: '$6,600.00',
-        totalOrders: 75,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7895',
-        customer: {
-            img: 'assets/images/users/user14.jpg',
-            name: 'Nathaniel Hulsey'
-        },
-        email: 'hulsey@example.com',
-        phone: '+1 555-225-4488',
-        lastLogin: 'Nov 19, 2023',
-        totalSpend: '$2,800.00',
-        totalOrders: 55,
-        status: {
-            // active: 'Active',
-            deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7895',
-        customer: {
-            img: 'assets/images/users/user14.jpg',
-            name: 'Nathaniel Hulsey'
-        },
-        email: 'hulsey@example.com',
-        phone: '+1 555-225-4488',
-        lastLogin: 'Nov 19, 2023',
-        totalSpend: '$2,800.00',
-        totalOrders: 55,
-        status: {
-            // active: 'Active',
-            deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-4652',
-        customer: {
-            img: 'assets/images/users/user13.jpg',
-            name: 'Thomas Wilson'
-        },
-        email: 'wildon@example.com',
-        phone: '+1 555-622-4488',
-        lastLogin: 'Nov 18, 2023',
-        totalSpend: '$6,600.00',
-        totalOrders: 75,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7642',
-        customer: {
-            img: 'assets/images/users/user6.jpg',
-            name: 'Marcelino Haddock'
-        },
-        email: 'haddock@example.com',
-        phone: '+1 555-456-8877',
-        lastLogin: 'Nov 17, 2023',
-        totalSpend: '$7,300.00',
-        totalOrders: 166,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7612',
-        customer: {
-            img: 'assets/images/users/user1.jpg',
-            name: 'Robert Fairweather'
-        },
-        email: 'robert@example.com',
-        phone: '+1 555-357-5888',
-        lastLogin: 'Nov 16, 2023',
-        totalSpend: '$9,100.00',
-        totalOrders: 184,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7346',
-        customer: {
-            img: 'assets/images/users/user9.jpg',
-            name: 'Ramiro McCarty'
-        },
-        email: 'ramiro@example.com',
-        phone: '+1 555-558-9966',
-        lastLogin: 'Nov 15, 2023',
-        totalSpend: '$640.00',
-        totalOrders: 46,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-4619',
-        customer: {
-            img: 'assets/images/users/user16.jpg',
-            name: 'Rebecca Block'
-        },
-        email: 'block@example.com',
-        phone: '+1 555-658-4488',
-        lastLogin: 'Nov 14, 2023',
-        totalSpend: '$8,200.00',
-        totalOrders: 169,
-        status: {
-            // active: 'Active',
-            deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-7342',
-        customer: {
-            img: 'assets/images/users/user5.jpg',
-            name: 'Barbara Cross'
-        },
-        email: 'cross@example.com',
-        phone: '+1 555-369-7878',
-        lastLogin: 'Nov 13, 2023',
-        totalSpend: '$2,500.00',
-        totalOrders: 279,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-2951',
-        customer: {
-            img: 'assets/images/users/user12.jpg',
-            name: 'Donna Miller'
-        },
-        email: 'donna@example.com',
-        phone: '+1 555-456-7890',
-        lastLogin: 'Nov 12, 2023',
-        totalSpend: '$3,890.00',
-        totalOrders: 145,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-1364',
-        customer: {
-            img: 'assets/images/users/user7.jpg',
-            name: 'Carolyn Barnes'
-        },
-        email: 'barnes@example.com',
-        phone: '+1 555-987-6543',
-        lastLogin: 'Nov 11, 2023',
-        totalSpend: '$258.00',
-        totalOrders: 99,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
-        }
-    },
-    {
-        orderId: '#ARP-1217',
-        customer: {
-            img: 'assets/images/users/user15.jpg',
-            name: 'Marcia Baker'
-        },
-        email: 'marcia@example.com',
-        phone: '+1 555-123-4567',
-        lastLogin: 'Nov 10, 2023',
-        totalSpend: '$6855.00',
-        totalOrders: 125,
-        status: {
-            active: 'Active',
-            // deactive: 'Deactive',
-        },
-        action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete'
+    async fetchData() {
+        try {
+            const dataInputs = await this.supabaseService.getInputs();
+            const elements = dataInputs.map((data) => ({
+                id: data.id,
+                name: data.name,
+                highlights: data.highlights,
+                description: data.description,
+                details: data.details,
+                dueDate: data.end_date,
+                startDate: '2024-06-20',
+                sold: 40,
+                redeemed: 12,
+                action: {
+                    view: 'visibility',
+                    edit: 'edit',
+                    delete: 'delete',
+                },
+                isActive: data.isActive,
+            }));
+            this.dataSource.data = elements;
+            console.log('Data fetched successfully:', this.dataSource.data);
+        } catch (error) {
+            console.error('Error fetching security users:', error);
         }
     }
-];
+
+    //delete user
+
+    async deleteUser(id: any) {
+        try {
+            const deleted = await this.supabaseService.updateInput(id);
+
+            // Update dataSource after successful deletion
+            this.dataSource.data = this.dataSource.data.filter(
+                (user) => user.isActive === true
+            );
+            console.log(`User with ID ${id} deleted successfully.`);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [];
+
 export interface PeriodicElement {
-    orderId: string;
-    customer: any;
-    email: string;
-    phone: string;
-    lastLogin: string;
-    totalSpend: string;
-    totalOrders: number;
-    status: any;
+    id: number;
+    name: string;
+    highlights: string;
+    description: string;
+    details: any;
+    dueDate: string;
+    startDate: string;
     action: any;
+    sold: number;
+    redeemed: number;
+    isActive: boolean;
 }

@@ -139,17 +139,63 @@ export class HttpServicesService {
     async getRating() {
         const { data, error } = await this.supabase
             .from('feedback')
-            .select('rating')
-            //   .eq('user_id', user_id)
-            //   .eq('option_id', product_id) As of now I have given name. once user page is created we can get the option name from the user panel and add these conditions.
-            .single();
+            .select('*');
 
         if (error) {
             console.error('Error fetching rating:', error);
         }
 
-        // return data;
-        console.log(data);
+        return data;
+        // console.log(data);
+    }
+
+    async addReply(feedbackId: number, reply: string) {
+        const { data, error } = await this.supabase
+            .from('feedback')
+            .update({ reply })
+            .eq('id', feedbackId);
+        if (error) {
+            console.error('Error adding reply:', error);
+        }
+        return data;
+    }
+
+    async getCustomerData() {
+        const { data, error } = await this.supabase
+            .from('customer_data')
+            .select('*');
+
+        if (error) {
+            throw error;
+        }
+        // console.log(data);
+        return data;
+    }
+
+    async getCustomerAgeData() {
+        const { data, error } = await this.supabase
+            .from('customer_age')
+            .select('*');
+        if (error) {
+            console.error('Error fetching data:', error);
+            return [];
+        }
+        return data;
+        // console.log(data);
+    }
+
+    async getGenderDistribution(): Promise<any[]> {
+        // Fetch gender distribution data from Supabase
+        const { data, error } = await this.supabase
+            .from('gender_distribution')
+            .select('*');
+
+        if (error) {
+            console.error('Error fetching gender distribution data:', error);
+            return [];
+        }
+
+        return data;
     }
 
     async deleteInput(id: string): Promise<boolean> {

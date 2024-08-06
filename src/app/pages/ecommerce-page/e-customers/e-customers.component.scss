@@ -1,12 +1,13 @@
+// To Do List
 .mat-mdc-card {
     &.daxa-card {
-        &.customers-card {
+        &.to-do-list-card {
             .mat-mdc-card-content {
                 margin: {
                     left: -20px;
                     right: -20px;
                 };
-                .customers-table {
+                .to-do-list-table {
                     .mat-mdc-table {
                         .mat-mdc-header-cell {
                             &:last-child {
@@ -17,6 +18,10 @@
                             }
                         }
                         .mat-mdc-cell {
+                            padding: {
+                                top: 21.5px;
+                                bottom: 21.5px;
+                            };
                             &:last-child {
                                 text-align: right;
                             }
@@ -24,23 +29,48 @@
                                 padding-right: 0;
                             }
                         }
-                        .info {
-                            .image {
-                                width: 35px;
-                                line-height: .01;
-                                margin-right: 12px;
+                        .daxa-badge {
+                            color: var(--daxaColor);
+                            background: rgba(15, 121, 243, 0.10);
 
-                                img {
-                                    border-radius: 50%;
-                                }
+                            &.in-progress {
+                                color: var(--warningColor);
+                                background: rgba(241, 179, 28, 0.10);
                             }
+                            &.pending {
+                                color: var(--successColor);
+                                background: rgba(46, 212, 126, 0.10);
+                            }
+                            &.not-started {
+                                color: var(--dangerColor);
+                                background: rgba(231, 76, 60, 0.10);
+                            }
+                        }
+                    }
+                }
+                .add-new-task-btn {
+                    padding: {
+                        top: 20px;
+                        left: 20px;
+                        right: 20px;
+                    };
+                    .mat-mdc-button {
+                        padding: 0;
+                        height: auto;
+                        min-width: auto;
+                        font: {
+                            size: var(--fontSize) !important;
+                            weight: normal;
+                        };
+                        &:not(:disabled) {
+                            color: var(--daxaColor);
                         }
                     }
                 }
             }
             &.rtl-enabled {
                 .mat-mdc-card-content {
-                    .customers-table {
+                    .to-do-list-table {
                         .mat-mdc-table {
                             .mat-mdc-header-cell {
                                 &:last-child {
@@ -64,14 +94,6 @@
                                     };
                                 }
                             }
-                            .info {
-                                .image {
-                                    margin: {
-                                        right: 0;
-                                        left: 12px;
-                                    };
-                                }
-                            }
                         }
                     }
                 }
@@ -79,18 +101,114 @@
         }
     }
 }
+
+// Add New Task Popup
 ::ng-deep {
-    .mat-mdc-card {
-        &.daxa-card {
-            &.customers-card {
+    .add-new-task-popup {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        z-index: 999;
+        position: fixed;
+        transition: .3s;
+        visibility: hidden;
+        background-color: rgba(0, 0, 0, 0.5);
+        overflow: {
+            x: hidden;
+            y: auto;
+        };
+        .popup-dialog {
+            display: flex;
+            transition: .3s;
+            max-width: 550px;
+            align-items: center;
+            transform: translate(0, -20px);
+            min-height: calc(100% - 1.75rem * 2);
+            margin: {
+                left: auto;
+                right: auto;
+            };
+            .daxa-card {
+                width: 100%;
+
+                .mat-mdc-card-header {
+                    border-bottom: 1px solid #eeeeee;
+                    margin: {
+                        left: -20px;
+                        right: -20px;
+                    };
+                    padding: {
+                        left: 20px;
+                        right: 20px;
+                        bottom: 18px;
+                    };
+                    .mat-mdc-card-subtitle {
+                        .mat-mdc-button {
+                            padding: 0;
+                            height: auto;
+                            line-height: 1;
+                            min-width: auto;
+                            display: inline-block;
+                            font-size: 23px !important;
+                        }
+                    }
+                }
                 .mat-mdc-card-content {
-                    .customers-table {
-                        .mat-mdc-paginator {
-                            padding: {
-                                top: 15px;
-                                left: 20px;
-                                right: 20px;
-                            };
+                    .main-label {
+                        margin-bottom: 12px;
+                        font-size: 15px;
+                    }
+                    .mat-mdc-form-field {
+                        margin-bottom: 20px;
+                    }
+                    .btn-box {
+                        text-align: right;
+
+                        .mat-mdc-button {
+                            border: 0;
+                            height: auto;
+                            min-width: auto;
+                            min-height: auto;
+                            padding: 14px 35px;
+                            font-weight: normal;
+                            color: var(--whiteColor);
+                            font-size: 15px !important;
+                            background-color: var(--daxaColor);
+
+                            &:first-child {
+                                margin-right: 10px;
+                                background-color: var(--dangerColor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.active {
+            opacity: 1;
+            visibility: visible;
+
+            .popup-dialog {
+                transform: none;
+            }
+        }
+        &.rtl-enabled {
+            .popup-dialog {
+                .daxa-card {
+                    .mat-mdc-card-content {
+                        .btn-box {
+                            text-align: left;
+    
+                            .mat-mdc-button {
+                                &:first-child {
+                                    margin: {
+                                        right: 0;
+                                        left: 10px;
+                                    };
+                                }
+                            }
                         }
                     }
                 }
@@ -102,32 +220,40 @@
 /* Max width 767px */
 @media only screen and (max-width : 767px) {
 
+    // To Do List
     .mat-mdc-card {
         &.daxa-card {
-            &.customers-card {
-                .mat-mdc-card-header {
-                    .search-box {
-                        margin-bottom: 12px;
-                    }
-                }
+            &.to-do-list-card {
                 .mat-mdc-card-content {
                     margin: {
                         left: -15px;
                         right: -15px;
                     };
-                    .customers-table {
+                    .to-do-list-table {
                         .mat-mdc-table {
+                            .mat-mdc-cell {
+                                padding: {
+                                    top: 15px;
+                                    bottom: 15px;
+                                };
+                            }
                             .info {
                                 .image {
+                                    width: 40px;
                                     margin-right: 8px;
                                 }
                             }
                         }
                     }
+                    .add-new-task-btn {
+                        .mat-mdc-button {
+                            font-size: 14px !important;
+                        }
+                    }
                 }
                 &.rtl-enabled {
                     .mat-mdc-card-content {
-                        .customers-table {
+                        .to-do-list-table {
                             .mat-mdc-table {
                                 .mat-mdc-header-cell {
                                     &:first-child {
@@ -143,13 +269,6 @@
                                         };
                                     }
                                 }
-                                .info {
-                                    .image {
-                                        margin: {
-                                            left: 8px;
-                                        };
-                                    }
-                                }
                             }
                         }
                     }
@@ -160,20 +279,54 @@
     ::ng-deep {
         .mat-mdc-card {
             &.daxa-card {
-                &.customers-card {
+                &.to-do-list-card {
                     .mat-mdc-card-header {
                         .mat-mdc-card-header-text {
                             display: block;
+
+                            .mat-mdc-card-subtitle {
+                                margin-top: 12px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Add New Task Popup
+    ::ng-deep {
+        .add-new-task-popup {
+            .popup-dialog {
+                max-width: 400px;
+                
+                .daxa-card {
+                    .mat-mdc-card-header {
+                        margin: {
+                            left: -15px;
+                            right: -15px;
+                        };
+                        padding: {
+                            left: 15px;
+                            right: 15px;
+                            bottom: 15px;
+                        };
+                        .mat-mdc-card-subtitle {
+                            .mat-mdc-button {
+                                font-size: 20px !important;
+                            }
                         }
                     }
                     .mat-mdc-card-content {
-                        .customers-table {
-                            .mat-mdc-paginator {
-                                padding: {
-                                    top: 10px;
-                                    left: 15px;
-                                    right: 15px;
-                                };
+                        .main-label {
+                            font-size: 14px;
+                        }
+                        .mat-mdc-form-field {
+                            margin-bottom: 15px;
+                        }
+                        .btn-box {
+                            .mat-mdc-button {
+                                font-size: 14px !important;
                             }
                         }
                     }
@@ -187,9 +340,10 @@
 /* Min width 576px to Max width 767px */
 @media only screen and (min-width : 576px) and (max-width : 767px) {
 
+    // To Do List
     .mat-mdc-card {
         &.daxa-card {
-            &.customers-card {
+            &.to-do-list-card {
                 .mat-mdc-card-content {
                     margin: {
                         left: -20px;
@@ -198,7 +352,7 @@
                 }
                 &.rtl-enabled {
                     .mat-mdc-card-content {
-                        .customers-table {
+                        .to-do-list-table {
                             .mat-mdc-table {
                                 .mat-mdc-header-cell {
                                     &:first-child {
@@ -221,18 +375,20 @@
             }
         }
     }
-    ::ng-deep {
-        .mat-mdc-card {
-            &.daxa-card {
-                &.customers-card {
-                    .mat-mdc-card-content {
-                        .customers-table {
-                            .mat-mdc-paginator {
-                                padding: {
-                                    left: 20px;
-                                    right: 20px;
-                                };
-                            }
+
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    // To Do List
+    .mat-mdc-card {
+        &.daxa-card {
+            &.to-do-list-card {
+                .mat-mdc-card-content {
+                    .add-new-task-btn {
+                        .mat-mdc-button {
+                            font-size: 15px !important;
                         }
                     }
                 }
@@ -241,9 +397,6 @@
     }
 
 }
-
-/* Min width 768px to Max width 991px */
-@media only screen and (min-width : 768px) and (max-width : 991px) {}
 
 /* Min width 992px to Max width 1199px */
 @media only screen and (min-width : 992px) and (max-width : 1199px) {}

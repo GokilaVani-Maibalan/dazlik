@@ -14,6 +14,7 @@ import {
     ApexDataLabels,
     ApexTooltip,
 } from 'ng-apexcharts';
+import { HttpServicesService } from '../../../services/http-services.service';
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
@@ -43,9 +44,9 @@ export class ProjectsProgressComponent {
     @ViewChild('chart') chart: ChartComponent;
     public chartOptions: Partial<ChartOptions>;
 
-    constructor() {
+    constructor(private supabaseService: HttpServicesService) {
         this.chartOptions = {
-            series: [60, 30, 10],
+            series: [],
             chart: {
                 height: 450,
                 type: 'donut',
@@ -86,5 +87,35 @@ export class ProjectsProgressComponent {
                 },
             },
         };
+    }
+
+    async ngOnInit() {
+        try {
+            const customerData = await this.supabaseService.getCustomerData();
+            this.updateChartOptions(customerData);
+        } catch (error) {
+            console.error('Error fetching customer data:', error);
+        }
+    }
+
+    updateChartOptions(data: any[]) {
+        const newCustomers = data
+            .filter((d) => d.type === 'new')
+            .reduce((sum: number, d: any) => sum + d.count, 0);
+
+        const returningCustomers = data
+            .filter((d) => d.type === 'returning')
+            .reduce((sum: number, d: any) => sum + d.count, 0);
+
+        const currentCustomers = data
+            .filter((d) => d.type === 'current')
+            .reduce((sum: number, d: any) => sum + d.count, 0);
+
+        this.chartOptions.series = [
+            newCustomers,
+            returningCustomers,
+            currentCustomers,
+        ];
+        console.log(this.chartOptions.series);
     }
 }

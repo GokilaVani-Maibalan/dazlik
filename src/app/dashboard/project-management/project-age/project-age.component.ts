@@ -14,6 +14,7 @@ import {
     ApexDataLabels,
     ApexTooltip,
 } from 'ng-apexcharts';
+import { HttpServicesService } from '../../../services/http-services.service';
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
@@ -41,15 +42,14 @@ export type ChartOptions = {
 export class ProjectAgeComponent {
     @ViewChild('chart') chart: ChartComponent;
     public chartOptions: Partial<ChartOptions>;
-
-    constructor() {
+    constructor(private supabaseService: HttpServicesService) {
         this.chartOptions = {
-            series: [70, 30],
+            series: [],
             chart: {
-                height: 450,
                 type: 'donut',
+                height: 450,
             },
-            labels: ['Male', 'Female'],
+            labels: [],
             legend: {
                 offsetY: 11,
                 fontSize: '14px',
@@ -72,7 +72,7 @@ export class ProjectAgeComponent {
                     enabled: false,
                 },
             },
-            colors: ['#669900', '#c4ff4d'],
+            colors: ['#669900', '#c4ff4d'], // Adjust colors based on your needs
             tooltip: {
                 y: {
                     formatter: function (val) {
@@ -81,5 +81,32 @@ export class ProjectAgeComponent {
                 },
             },
         };
+    }
+
+    ngOnInit() {
+        this.loadGenderData();
+    }
+
+    async loadGenderData() {
+        try {
+            const data = await this.supabaseService.getGenderDistribution();
+            if (data.length) {
+                this.updateChartOptions(data);
+            }
+        } catch (error) {
+            console.error('Error loading gender data:', error);
+        }
+    }
+
+    updateChartOptions(data: any[]) {
+        const maleCount = data.find((d) => d.gender === 'Male')?.count || 0;
+        const femaleCount = data.find((d) => d.gender === 'Female')?.count || 0;
+
+        this.chartOptions.series = [maleCount, femaleCount];
+        this.chartOptions.labels = ['Male', 'Female'];
+
+        if (this.chart) {
+            this.chart.updateOptions(this.chartOptions);
+        }
     }
 }

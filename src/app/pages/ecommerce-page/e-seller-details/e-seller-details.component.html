@@ -134,34 +134,53 @@
                                     alt="seller-image"
                                 />
                             </div>
-                            <h5 class="mb-0 mt-0">{{ data.customer_name }}</h5>
-                            <div class="star-rating">
-                                <span
-                                    *ngFor="let star of stars; let i = index"
-                                    class="star"
-                                    [class.filled]="i < rating"
-                                >
-                                    ★
-                                </span>
+                            <div style="display: flex; flex-direction: column">
+                                <h5 class="mb-0 mt-0">
+                                    {{ data.customer_name }}
+                                </h5>
+                                <div class="star-rating">
+                                    <span
+                                        *ngFor="
+                                            let star of stars;
+                                            let i = index
+                                        "
+                                        class="star"
+                                        [class.filled]="i < data.rating"
+                                    >
+                                        ★
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <p>{{ data.content }}</p>
                     </div>
 
-                    <h5>Reply</h5>
-
-                    <form>
-                        <mat-form-field>
-                            <mat-label>Leave a comment</mat-label>
-                            <textarea
-                                matInput
-                                placeholder="Ex. It makes me feel..."
-                            ></textarea>
-                        </mat-form-field>
-                        <button mat-button style="margin-bottom: 10px">
-                            Send Reply
-                        </button>
-                    </form>
+                    <h5 *ngIf="!data.reply">Reply</h5>
+                    <div *ngIf="!data.reply">
+                        <form
+                            [formGroup]="replyForm"
+                            (ngSubmit)="submitReply(data.id)"
+                        >
+                            <mat-form-field>
+                                <mat-label>Leave a comment</mat-label>
+                                <textarea
+                                    matInput
+                                    formControlName="reply"
+                                    placeholder="Ex. It makes me feel..."
+                                ></textarea>
+                            </mat-form-field>
+                            <button
+                                mat-button
+                                style="margin-bottom: 10px"
+                                type="submit"
+                                [disabled]="replyForm.invalid"
+                            >
+                                Send Reply
+                            </button>
+                        </form>
+                    </div>
+                    <div *ngIf="data.reply">
+                        <p style="color: black">{{ data.reply }}</p>
+                    </div>
                     <hr />
                 </div>
             </mat-card-content>
