@@ -34,7 +34,10 @@ export class ResetPasswordComponent {
         private supabaseService: HttpServicesService
     ) {
         this.authForm = this.fb.group({
-            email: ['', [Validators.required, Validators.email]],
+            confirmPassword: [
+                '',
+                [Validators.required, Validators.minLength(8)],
+            ],
             password: ['', [Validators.required, Validators.minLength(8)]],
         });
         this.themeService.isToggled$.subscribe((isToggled) => {

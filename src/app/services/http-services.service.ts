@@ -226,7 +226,7 @@ export class HttpServicesService {
                 alert('Invalid credentials');
             } else {
                 alert('User logged in successfully');
-                this.router.navigate(['/ecommerce-page/create-category']);
+                this.router.navigate(['/ecommerce-page']);
             }
             return data;
         } catch (error) {
